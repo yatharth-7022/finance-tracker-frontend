@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
-import { Plus, Trash2, DollarSign } from "lucide-react";
+import { Plus, Trash2, IndianRupee } from "lucide-react";
 import { Button, Input, Select, Textarea, Modal, Toast } from "../ui";
 import { useCreateTransaction } from "../../hooks/useTransactions";
 import {
@@ -229,7 +229,7 @@ export const AddTransactionForm: React.FC<AddTransactionFormProps> = ({
                       <button
                         type="button"
                         onClick={() => setCategoryToDelete(category?.id)}
-                        className="text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 transition-colors"
+                        className="text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 transition-colors"
                       >
                         <Trash2 className="h-3 w-3" />
                       </button>
@@ -266,7 +266,7 @@ export const AddTransactionForm: React.FC<AddTransactionFormProps> = ({
               loading={createTransaction.isPending}
               className="flex-1"
             >
-              <DollarSign className="h-4 w-4 mr-2" />
+              <IndianRupee className="h-4 w-4 mr-2" />
               Add Transaction
             </Button>
           </div>
@@ -356,7 +356,7 @@ export const AddTransactionForm: React.FC<AddTransactionFormProps> = ({
                 categoryToDelete && handleDeleteCategory(categoryToDelete)
               }
               loading={deleteCategory.isPending}
-              className="flex-1 bg-red-600 hover:bg-red-700"
+              className="flex-1 !bg-red-500 hover:!bg-red-600 !text-white dark:!bg-red-500 dark:hover:!bg-red-600 dark:!text-white"
             >
               Delete
             </Button>

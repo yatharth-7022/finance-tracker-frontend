@@ -83,7 +83,7 @@ export const DashboardPage: React.FC = () => {
           </Button>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <StatsCard
             title="Total Balance"
             value={summary?.balance || 0}
@@ -112,15 +112,6 @@ export const DashboardPage: React.FC = () => {
             }
             trend={{ value: 3.1, isPositive: false }}
             delay={0.3}
-          />
-
-          <StatsCard
-            title="Transactions"
-            value={stats?.transactionCount || 0}
-            icon={
-              <CreditCard className="h-6 w-6 text-gray-600 dark:text-gray-400" />
-            }
-            delay={0.4}
           />
         </div>
 

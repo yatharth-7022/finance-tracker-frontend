@@ -43,12 +43,22 @@ export const TransactionList: React.FC<TransactionListProps> = ({
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return "Unknown Date";
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    }).format(date);
+    try {
+      const date = new Date(dateString);
+      // Check if date is valid
+      if (isNaN(date.getTime())) return "Invalid Date";
+
+      return new Intl.DateTimeFormat("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      }).format(date);
+    } catch (error) {
+      console.error("Error formatting date:", error);
+      return "Invalid Date";
+    }
   };
 
   const handleDeleteTransaction = async (transactionId: number) => {
@@ -113,15 +123,15 @@ export const TransactionList: React.FC<TransactionListProps> = ({
               transition={{ duration: 0.3, delay: index * 0.05 }}
               className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md dark:hover:shadow-lg transition-all duration-200"
             >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
+              <div className="flex items-start justify-between">
+                <div className="flex items-start space-x-4 flex-1">
                   {/* Transaction Type Icon */}
                   <div
                     className={cn(
-                      "p-2 rounded-full",
+                      "p-2 rounded-full flex-shrink-0",
                       transaction?.type === "INCOME"
-                        ? "bg-green-100 text-green-600"
-                        : "bg-red-100 text-red-600"
+                        ? "bg-green-100 text-green-600 dark:bg-green-900/20 dark:text-green-400"
+                        : "bg-red-100 text-red-600 dark:bg-red-900/20 dark:text-red-400"
                     )}
                   >
                     {transaction?.type === "INCOME" ? (
@@ -132,58 +142,38 @@ export const TransactionList: React.FC<TransactionListProps> = ({
                   </div>
 
                   {/* Transaction Details */}
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-medium text-gray-900 dark:text-gray-100">
-                          {getCategoryName(transaction?.categoryId)}
-                        </p>
-                        <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
-                          <Calendar className="h-3 w-3" />
-                          <span>{formatDate(transaction?.createdAt)}</span>
-                        </div>
-                      </div>
-
-                      <div className="text-right">
-                        <p
-                          className={cn(
-                            "font-semibold text-lg",
-                            transaction?.type === "INCOME"
-                              ? "text-green-600"
-                              : "text-red-600"
-                          )}
-                        >
-                          {transaction?.type === "INCOME" ? "+" : "-"}
-                          {formatCurrency(transaction?.amount || 0)}
-                        </p>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-col space-y-1">
+                      <p className="font-medium text-gray-900 dark:text-gray-100 truncate">
+                        {getCategoryName(transaction?.categoryId)}
+                      </p>
+                      <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+                        <Calendar className="h-3 w-3 flex-shrink-0" />
+                        <span className="truncate">
+                          {formatDate(transaction?.date)}
+                        </span>
                       </div>
                     </div>
-
-                    {/* Description */}
-                    {transaction?.description && (
-                      <motion.div
-                        initial={false}
-                        animate={{
-                          height:
-                            expandedTransaction === transaction?.id
-                              ? "auto"
-                              : 0,
-                          opacity:
-                            expandedTransaction === transaction?.id ? 1 : 0,
-                        }}
-                        transition={{ duration: 0.2 }}
-                        className="overflow-hidden"
-                      >
-                        <p className="text-sm text-gray-600 dark:text-gray-300 mt-2 pt-2 border-t border-gray-100 dark:border-gray-700">
-                          {transaction?.description}
-                        </p>
-                      </motion.div>
-                    )}
                   </div>
                 </div>
 
+                {/* Amount - Separate column */}
+                <div className="text-right ml-4 flex-shrink-0">
+                  <p
+                    className={cn(
+                      "font-semibold text-lg",
+                      transaction?.type === "INCOME"
+                        ? "text-green-600 dark:text-green-400"
+                        : "text-red-600 dark:text-red-400"
+                    )}
+                  >
+                    {transaction?.type === "INCOME" ? "+" : "-"}
+                    {formatCurrency(transaction?.amount || 0)}
+                  </p>
+                </div>
+
                 {/* Actions */}
-                <div className="flex items-center space-x-1">
+                <div className="flex items-center space-x-1 ml-4">
                   {transaction?.description && (
                     <Button
                       variant="ghost"
@@ -205,12 +195,30 @@ export const TransactionList: React.FC<TransactionListProps> = ({
                     variant="ghost"
                     size="sm"
                     onClick={() => setTransactionToDelete(transaction?.id)}
-                    className="p-1 h-8 w-8 text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400"
+                    className="p-1 h-8 w-8 text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
+
+              {/* Description */}
+              {transaction?.description && (
+                <motion.div
+                  initial={false}
+                  animate={{
+                    height:
+                      expandedTransaction === transaction?.id ? "auto" : 0,
+                    opacity: expandedTransaction === transaction?.id ? 1 : 0,
+                  }}
+                  transition={{ duration: 0.2 }}
+                  className="overflow-hidden"
+                >
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mt-2 pt-2 border-t border-gray-100 dark:border-gray-700">
+                    {transaction?.description}
+                  </p>
+                </motion.div>
+              )}
             </motion.div>
           ))}
         </AnimatePresence>
@@ -223,8 +231,8 @@ export const TransactionList: React.FC<TransactionListProps> = ({
         title="Delete Transaction"
         size="sm"
       >
-        <div className="space-y-4">
-          <p className="text-gray-600 dark:text-gray-300">
+        <div className="space-y-4 mt-4">
+          <p className="text-gray-600 dark:text-gray-300 mt-2">
             Are you sure you want to delete this transaction? This action cannot
             be undone.
           </p>
@@ -245,7 +253,7 @@ export const TransactionList: React.FC<TransactionListProps> = ({
                 handleDeleteTransaction(transactionToDelete)
               }
               loading={deleteTransaction.isPending}
-              className="flex-1 bg-red-600 hover:bg-red-700"
+              className="flex-1 !bg-red-500 hover:!bg-red-600 !text-white dark:!bg-red-500 dark:hover:!bg-red-600 dark:!text-white"
             >
               Delete
             </Button>

@@ -65,6 +65,7 @@ export interface Transaction {
   type: string;
   categoryId: number;
   category?: Category;
+  date: string;
   createdAt: string;
   updatedAt: string;
   userId: number;

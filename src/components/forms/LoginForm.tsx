@@ -36,10 +36,10 @@ export const LoginForm: React.FC = () => {
   return (
     <div className="w-full max-w-md space-y-6 animate-fade-in">
       <div className="text-center space-y-2">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
           Welcome back
         </h1>
-        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+        <p className="text-sm sm:text-base text-gray-600">
           Sign in to your account to continue
         </p>
       </div>
@@ -49,6 +49,7 @@ export const LoginForm: React.FC = () => {
           label="Username or Email"
           placeholder="Enter your username or email"
           error={errors.usernameOrEmail?.message}
+          forceLight={true}
           {...register("usernameOrEmail")}
         />
 
@@ -57,6 +58,7 @@ export const LoginForm: React.FC = () => {
           type="password"
           placeholder="Enter your password"
           error={errors.password?.message}
+          forceLight={true}
           {...register("password")}
         />
 

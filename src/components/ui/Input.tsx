@@ -5,6 +5,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
   helperText?: string;
+  forceLight?: boolean;
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -13,6 +14,7 @@ export const Input: React.FC<InputProps> = ({
   helperText,
   className,
   id,
+  forceLight = false,
   ...props
 }) => {
   const inputId = id || label?.toLowerCase().replace(/\s+/g, "-");
@@ -22,23 +24,44 @@ export const Input: React.FC<InputProps> = ({
       {label && (
         <label
           htmlFor={inputId}
-          className="text-sm font-semibold text-black dark:text-white"
+          className={cn(
+            "text-sm font-semibold",
+            forceLight ? "text-black" : "text-black dark:text-white"
+          )}
         >
           {label}
         </label>
       )}
       <input
         id={inputId}
-        className={cn("input", error && "input-error", className)}
+        className={cn(
+          forceLight
+            ? "flex h-10 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-black ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            : "input",
+          error && "input-error",
+          className
+        )}
         {...props}
       />
       {error && (
-        <p className="text-sm text-red-600 dark:text-red-400 animate-slide-down">
+        <p
+          className={cn(
+            "text-sm animate-slide-down",
+            forceLight ? "text-red-600" : "text-red-600 dark:text-red-400"
+          )}
+        >
           {error}
         </p>
       )}
       {helperText && !error && (
-        <p className="text-sm text-gray-500 dark:text-gray-400">{helperText}</p>
+        <p
+          className={cn(
+            "text-sm",
+            forceLight ? "text-gray-500" : "text-gray-500 dark:text-gray-400"
+          )}
+        >
+          {helperText}
+        </p>
       )}
     </div>
   );

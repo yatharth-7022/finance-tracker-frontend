@@ -61,6 +61,7 @@ export const SignupForm: React.FC = () => {
           label="Username"
           placeholder="John"
           error={errors.username?.message}
+          forceLight={true}
           {...register("username")}
         />
 
@@ -69,6 +70,7 @@ export const SignupForm: React.FC = () => {
           type="email"
           placeholder="john@example.com"
           error={errors.email?.message}
+          forceLight={true}
           {...register("email")}
         />
 
@@ -77,6 +79,7 @@ export const SignupForm: React.FC = () => {
           type="password"
           placeholder="Create a strong password"
           error={errors.password?.message}
+          forceLight={true}
           {...register("password")}
         />
 
@@ -85,6 +88,7 @@ export const SignupForm: React.FC = () => {
           type="password"
           placeholder="Confirm your password"
           error={errors.confirmPassword?.message}
+          forceLight={true}
           {...register("confirmPassword")}
         />
 

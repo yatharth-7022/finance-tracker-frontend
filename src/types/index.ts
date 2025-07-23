@@ -57,6 +57,13 @@ export interface CategoryRequest {
   type: "INCOME" | "EXPENSE";
 }
 
+export interface BudgetRequest {
+  amount: number;
+  month: number;
+  year: number;
+  categoryId: number;
+}
+
 // API Response structures
 export interface Transaction {
   id: number;
@@ -75,6 +82,18 @@ export interface Category {
   id: number;
   name: string;
   type: "INCOME" | "EXPENSE";
+  userId: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Budget {
+  id: number;
+  amount: number;
+  month: number;
+  year: number;
+  categoryId: number;
+  categoryName: string;
   userId: number;
   createdAt: string;
   updatedAt: string;

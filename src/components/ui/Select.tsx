@@ -7,6 +7,7 @@ export interface SelectOption {
   value: string | number;
   label: string;
   disabled?: boolean;
+  tooltip?: string;
 }
 
 interface SelectProps {
@@ -106,13 +107,27 @@ export const Select: React.FC<SelectProps> = ({
                   type="button"
                   onClick={() => handleSelect(option.value)}
                   disabled={option.disabled}
+                  title={option.tooltip}
                   className={cn(
                     "flex w-full items-center justify-between px-3 py-2 text-sm text-left hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed text-gray-900 dark:text-gray-100",
                     value === option.value &&
-                      "bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                      "bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100",
+                    option.disabled &&
+                      "hover:bg-transparent dark:hover:bg-transparent"
                   )}
                 >
-                  <span>{option.label}</span>
+                  <span
+                    className={cn(
+                      option.disabled && "text-gray-400 dark:text-gray-500"
+                    )}
+                  >
+                    {option.label}
+                    {option.disabled && option.tooltip && (
+                      <span className="block text-xs text-gray-400 dark:text-gray-500 mt-1">
+                        {option.tooltip}
+                      </span>
+                    )}
+                  </span>
                   {value === option.value && (
                     <Check className="h-4 w-4 text-gray-600 dark:text-gray-400" />
                   )}

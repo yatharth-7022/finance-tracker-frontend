@@ -11,6 +11,7 @@ import { Header } from "../components/layout/Header";
 import { StatsCard } from "../components/dashboard/StatsCard";
 import { TransactionList } from "../components/dashboard/TransactionList";
 import { FinancePieChart } from "../components/dashboard/FinancePieChart";
+import { BudgetOverview } from "../components/dashboard/BudgetOverview";
 import { AddTransactionForm } from "../components/forms/AddTransactionForm";
 import { Card, CardHeader, CardContent, Button } from "../components/ui";
 import { useDashboardStats, useDashboardSummary } from "../hooks/useDashboard";
@@ -121,6 +122,11 @@ export const DashboardPage: React.FC = () => {
             <FinancePieChart data={summary} isLoading={summaryLoading} />
           </div>
         )}
+
+        {/* Budget Overview */}
+        <div className="mb-8">
+          <BudgetOverview />
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <motion.div

@@ -10,6 +10,8 @@ import type {
   TransactionRequest,
   Category,
   CategoryRequest,
+  Budget,
+  BudgetRequest,
   ApiResponse,
 } from "../types/index.js";
 
@@ -213,6 +215,35 @@ export const categoryApi = {
 
   delete: async (id: number): Promise<void> => {
     await apiRequest<ApiResponse<null>>(`/category/delete/${id}`, {
+      method: "DELETE",
+    });
+  },
+};
+
+export const budgetApi = {
+  create: async (budget: BudgetRequest): Promise<Budget> => {
+    const response = await apiRequest<ApiResponse<Budget>>("/budget", {
+      method: "POST",
+      body: JSON.stringify(budget),
+    });
+    return response.data;
+  },
+
+  update: async (id: number, budget: BudgetRequest): Promise<Budget> => {
+    const response = await apiRequest<ApiResponse<Budget>>(`/budget`, {
+      method: "POST",
+      body: JSON.stringify({ ...budget, id }),
+    });
+    return response.data;
+  },
+
+  getAll: async (): Promise<Budget[]> => {
+    const response = await apiRequest<ApiResponse<Budget[]>>("/budget");
+    return response.data;
+  },
+
+  delete: async (id: number): Promise<void> => {
+    await apiRequest<ApiResponse<null>>(`/budget/${id}`, {
       method: "DELETE",
     });
   },

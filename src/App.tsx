@@ -9,6 +9,7 @@ import { queryClient } from "./lib/queryClient";
 import { LoginPage } from "./pages/LoginPage";
 import { SignupPage } from "./pages/SignupPage";
 import { DashboardPage } from "./pages/DashboardPage";
+import { BudgetPage } from "./pages/BudgetPage";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 
 function App() {
@@ -23,6 +24,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/budgets"
+            element={
+              <ProtectedRoute>
+                <BudgetPage />
               </ProtectedRoute>
             }
           />

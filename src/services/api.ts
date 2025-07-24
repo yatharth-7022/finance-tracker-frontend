@@ -14,6 +14,7 @@ import type {
   BudgetRequest,
   ApiResponse,
   MonthlyForecast,
+  SpendingByCategory,
 } from "../types/index.js";
 
 const API_BASE_URL =
@@ -183,10 +184,27 @@ export const transactionApi = {
     return response.data;
   },
 
-  getAll: async (): Promise<Transaction[]> => {
-    const response = await apiRequest<ApiResponse<Transaction[]>>(
-      "/transaction"
-    );
+  getAll: async (params?: {
+    type?: string;
+    categoryId?: string;
+  }): Promise<Transaction[]> => {
+    let url = "/transaction";
+    const queryParams: string[] = [];
+
+    // Add query parameters if provided
+    if (params?.type && params.type !== "all") {
+      queryParams.push(`type=${encodeURIComponent(params.type)}`);
+    }
+
+    if (params?.categoryId && params.categoryId !== "all") {
+      queryParams.push(`categoryId=${encodeURIComponent(params.categoryId)}`);
+    }
+
+    if (queryParams.length > 0) {
+      url += `?${queryParams.join("&")}`;
+    }
+
+    const response = await apiRequest<ApiResponse<Transaction[]>>(url);
     return response.data;
   },
 
@@ -194,6 +212,13 @@ export const transactionApi = {
     await apiRequest<ApiResponse<null>>(`/transaction/delete/${id}`, {
       method: "DELETE",
     });
+  },
+
+  getSpendingByCategory: async (): Promise<SpendingByCategory[]> => {
+    const response = await apiRequest<ApiResponse<SpendingByCategory[]>>(
+      "/transaction/category"
+    );
+    return response.data;
   },
 };
 

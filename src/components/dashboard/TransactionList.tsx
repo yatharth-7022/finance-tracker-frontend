@@ -20,10 +20,16 @@ import type { Transaction } from "../../types";
 
 interface TransactionListProps {
   className?: string;
+  limit?: number;
+  showAll?: boolean;
+  transactions?: Transaction[];
 }
 
 export const TransactionList: React.FC<TransactionListProps> = ({
   className,
+  limit = 10,
+  showAll = false,
+  transactions: propTransactions,
 }) => {
   const [transactionToDelete, setTransactionToDelete] = useState<number | null>(
     null
@@ -32,8 +38,18 @@ export const TransactionList: React.FC<TransactionListProps> = ({
     null
   );
 
-  const { data: transactions = [], isLoading, error } = useTransactions();
+  const {
+    data: fetchedTransactions = [],
+    isLoading,
+    error,
+  } = useTransactions();
   const { data: categories = [] } = useCategories();
+
+  // Use provided transactions or fetch them, and apply limit if not showing all
+  const transactions = propTransactions || fetchedTransactions;
+  const displayTransactions = showAll
+    ? transactions
+    : transactions.slice(0, limit);
   const deleteTransaction = useDeleteTransaction();
 
   const getCategoryName = (categoryId: number) => {
@@ -95,7 +111,7 @@ export const TransactionList: React.FC<TransactionListProps> = ({
     );
   }
 
-  if (transactions?.length === 0) {
+  if (displayTransactions?.length === 0) {
     return (
       <div
         className={cn(
@@ -114,7 +130,7 @@ export const TransactionList: React.FC<TransactionListProps> = ({
     <>
       <div className={cn("space-y-3", className)}>
         <AnimatePresence>
-          {transactions?.map((transaction, index) => (
+          {displayTransactions?.map((transaction, index) => (
             <motion.div
               key={transaction?.id}
               initial={{ opacity: 0, y: 20 }}

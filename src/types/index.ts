@@ -112,6 +112,13 @@ export interface DashboardSummary {
   balance: number;
 }
 
+export interface SpendingByCategory {
+  categoryId: number;
+  categoryName: string;
+  totalAmount: number;
+  transactionCount: number;
+}
+
 // AI Forecasting interfaces
 export interface ForecastTip {
   category: string;

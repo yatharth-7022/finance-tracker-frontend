@@ -6,6 +6,7 @@ import {
   Wallet,
   CreditCard,
   Plus,
+  ArrowRight,
 } from "lucide-react";
 import { Header } from "../components/layout/Header";
 import { StatsCard } from "../components/dashboard/StatsCard";
@@ -13,11 +14,14 @@ import { TransactionList } from "../components/dashboard/TransactionList";
 import { FinancePieChart } from "../components/dashboard/FinancePieChart";
 import { BudgetOverview } from "../components/dashboard/BudgetOverview";
 import { AIForecastWidget } from "../components/dashboard/AIForecastWidget";
+import { SpendingByCategoryChart } from "../components/dashboard/SpendingByCategoryChart";
 import { AddTransactionForm } from "../components/forms/AddTransactionForm";
 import { Card, CardHeader, CardContent, Button } from "../components/ui";
 import { useDashboardStats, useDashboardSummary } from "../hooks/useDashboard";
+import { useNavigate } from "react-router-dom";
 
 export const DashboardPage: React.FC = () => {
+  const navigate = useNavigate();
   const [showAddTransaction, setShowAddTransaction] = useState(false);
   const { data: stats, isLoading, error } = useDashboardStats();
   const {
@@ -140,38 +144,28 @@ export const DashboardPage: React.FC = () => {
           >
             <Card>
               <CardHeader>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                  Recent Transactions
-                </h3>
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                    Recent Transactions
+                  </h3>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => navigate("/transactions")}
+                    className="flex items-center space-x-1 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
+                  >
+                    <span>View All</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent>
-                <TransactionList />
+                <TransactionList limit={5} />
               </CardContent>
             </Card>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-          >
-            <Card>
-              <CardHeader>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                  Spending by Category
-                </h3>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                  <TrendingDown className="h-12 w-12 mx-auto mb-4 text-gray-300 dark:text-gray-600" />
-                  <p>No spending data yet</p>
-                  <p className="text-sm">
-                    Add transactions to see your spending breakdown
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
+          <SpendingByCategoryChart />
         </div>
       </main>
 

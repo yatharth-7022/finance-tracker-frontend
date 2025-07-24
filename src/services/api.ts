@@ -13,6 +13,7 @@ import type {
   Budget,
   BudgetRequest,
   ApiResponse,
+  MonthlyForecast,
 } from "../types/index.js";
 
 const API_BASE_URL =
@@ -246,5 +247,14 @@ export const budgetApi = {
     await apiRequest<ApiResponse<null>>(`/budget/${id}`, {
       method: "DELETE",
     });
+  },
+};
+
+export const forecastApi = {
+  getMonthlyForecast: async (userId: string): Promise<MonthlyForecast> => {
+    const response = await apiRequest<ApiResponse<MonthlyForecast>>(
+      `/forecast/monthly/${userId}`
+    );
+    return response.data;
   },
 };

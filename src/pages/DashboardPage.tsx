@@ -12,6 +12,7 @@ import { StatsCard } from "../components/dashboard/StatsCard";
 import { TransactionList } from "../components/dashboard/TransactionList";
 import { FinancePieChart } from "../components/dashboard/FinancePieChart";
 import { BudgetOverview } from "../components/dashboard/BudgetOverview";
+import { AIForecastWidget } from "../components/dashboard/AIForecastWidget";
 import { AddTransactionForm } from "../components/forms/AddTransactionForm";
 import { Card, CardHeader, CardContent, Button } from "../components/ui";
 import { useDashboardStats, useDashboardSummary } from "../hooks/useDashboard";
@@ -84,7 +85,7 @@ export const DashboardPage: React.FC = () => {
           </Button>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <StatsCard
             title="Total Balance"
             value={summary?.balance || 0}
@@ -114,6 +115,9 @@ export const DashboardPage: React.FC = () => {
             trend={{ value: 3.1, isPositive: false }}
             delay={0.3}
           />
+
+          {/* AI Forecasting Widget */}
+          <AIForecastWidget />
         </div>
 
         {/* Financial Overview Chart */}

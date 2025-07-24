@@ -111,3 +111,35 @@ export interface DashboardSummary {
   totalExpense: number;
   balance: number;
 }
+
+// AI Forecasting interfaces
+export interface ForecastTip {
+  category: string;
+  message: string;
+  priority: "high" | "medium" | "low";
+}
+
+export interface ForecastWarning {
+  type: "overspending" | "budget_exceeded" | "unusual_pattern";
+  message: string;
+  severity: "critical" | "warning" | "info";
+}
+
+export interface ForecastTimeRange {
+  // Support both API response formats
+  startDate?: string;
+  endDate?: string;
+  start?: string;
+  end?: string;
+  daysRemaining?: number; // Optional since we calculate it on frontend
+}
+
+export interface MonthlyForecast {
+  estimatedSpending: number;
+  averageDailySpend: number;
+  timeRange: ForecastTimeRange;
+  totalSpentSoFar: number;
+  tipSummary: (ForecastTip | string)[]; // Support both object and string formats
+  warnings: (ForecastWarning | string)[]; // Support both object and string formats
+  generatedAt: string;
+}
